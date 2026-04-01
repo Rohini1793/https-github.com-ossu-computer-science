@@ -161,6 +161,107 @@ def read_file_safe(filename):
 print(read_file_safe("python_notes.txt"))
 print(read_file_safe("ghost_file.txt"))
 
+#Robust API Calls:
+import requests
+
+# -------------------------------
+# GET REQUEST (Example: Fetch products)
+# -------------------------------
+def fetch_products():
+    url = "https://dummyjson.com/products?limit=20"
+    
+    try:
+        response = requests.get(url, timeout=5)
+        
+        # Check HTTP response (NOT an exception)
+        if response.status_code == 200:
+            data = response.json()
+            print("Products fetched successfully.\n")
+            return data
+        else:
+            print(f"HTTP Error: {response.status_code}")
+            return None
+
+    except requests.exceptions.ConnectionError:
+        print("Connection failed. Please check your internet.")
+    
+    except requests.exceptions.Timeout:
+        print("Request timed out. Try again later.")
+    
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
+    return None
+
+
+# -------------------------------
+# GET REQUEST (Category search)
+# -------------------------------
+def fetch_laptops():
+    url = "https://dummyjson.com/products/category/laptops"
+    
+    try:
+        response = requests.get(url, timeout=5)
+
+        if response.status_code == 200:
+            data = response.json()
+            print("Laptop data fetched.\n")
+            return data
+        else:
+            print(f"HTTP Error: {response.status_code}")
+            return None
+
+    except requests.exceptions.ConnectionError:
+        print("Connection failed. Please check your internet.")
+    
+    except requests.exceptions.Timeout:
+        print("Request timed out. Try again later.")
+    
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
+    return None
+
+
+# -------------------------------
+# POST REQUEST (Add product)
+# -------------------------------
+def add_product():
+    url = "https://dummyjson.com/products/add"
+
+    payload = {
+        "title": "My Custom Product",
+        "price": 999,
+        "category": "electronics",
+        "description": "A product I created via API"
+    }
+
+    try:
+        response = requests.post(url, json=payload, timeout=5)
+
+        if response.status_code in [200, 201]:
+            print("Product added successfully.\n")
+            print(response.json())
+        else:
+            print(f"HTTP Error: {response.status_code}")
+
+    except requests.exceptions.ConnectionError:
+        print("Connection failed. Please check your internet.")
+    
+    except requests.exceptions.Timeout:
+        print("Request timed out. Try again later.")
+    
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
+
+# -------------------------------
+# MAIN CALLS
+# -------------------------------
+if __name__ == "__main__":
+    fetch_products()
+    fetch_laptops()
+    add_product()
 
 # Input validation loop
 while True:
